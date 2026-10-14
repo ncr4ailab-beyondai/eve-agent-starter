@@ -1,0 +1,80 @@
+{
+  "enabledMcpjsonServers": [
+    "context7",
+    "next-devtools"
+  ],
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "ask": [
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(gh pr create *)",
+      "Bash(gh pr merge *)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/planner-gate.mjs\""
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/security-check.mjs\""
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/docs-check.mjs\" require"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__.*context7.*__query-docs|WebFetch|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/docs-check.mjs\" record"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/test-check.mjs\""
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "coding|refactoring",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/test-check.mjs\""
+          }
+        ]
+      }
+    ]
+  }
+}

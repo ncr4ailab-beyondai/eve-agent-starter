@@ -1,0 +1,16 @@
+# Same MCP packages as the agents' .mcp.json; npx.cmd is the Windows launcher.
+[mcp_servers.context7]
+command = "npx.cmd"
+args = ["-y", "@upstash/context7-mcp"]
+startup_timeout_sec = 60
+
+[mcp_servers.next-devtools]
+command = "npx.cmd"
+args = ["-y", "next-devtools-mcp@latest"]
+startup_timeout_sec = 60
+
+[features]
+hooks = true
+
+[agents]
+enabled = true
